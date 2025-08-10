@@ -1,12 +1,16 @@
+import os.path
 from pathlib import Path
 
-from django.conf.global_settings import STATICFILES_DIRS
+from django.conf.global_settings import STATICFILES_DIRS, MEDIA_URL
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-u@w=m%s(4=vs092dk-+s9!9xm9$v8oic4=+n5%wpmm6s0b3w=1'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True
+DEBUG = True if os.getenv('DEBUG') == "True" else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -51,8 +55,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST'),
+        'PORT': os.getenv('PORT', default='5432')
     }
 }
 
@@ -84,3 +92,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = (BASE_DIR / 'static',)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
