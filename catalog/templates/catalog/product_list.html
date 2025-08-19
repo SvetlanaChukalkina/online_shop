@@ -1,10 +1,20 @@
-{% extends 'base.html' %}
+{% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block content %}
+<section class="py-5 text-center container">
+    <div class="row">
+        <div class="col-lg-6 col-md-2 mx-auto">
+            <h1 class="fw-light">КАТАЛОГ ТОВАРОВ</h1>
+            <p>
+                <a class="btn btn-primary" href="{% url 'catalog:product_create' %}" role="button">Создать новую карточку</a>
+            </p>
+        </div>
+    </div>
+</section>
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for product in products %}
+            {% for product in object_list %}
             <div class="col">
                 <div class="card shadow-sm">
                     <img src="{{ product.photo | media_filter }}">
@@ -15,7 +25,6 @@
                             <div class="btn-group">
                                 <a class="btn btn-primary" href="{% url 'catalog:product_details' product.pk %}" role="button">В карточку товара</a>
                             </div>
-                            <small class="text-body-secondary">9 mins</small>
                         </div>
                     </div>
                 </div>
