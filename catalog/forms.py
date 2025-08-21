@@ -19,15 +19,21 @@ class ProductForm(StyleFormMixin, ModelForm):
         fields = '__all__'
 
     def clean_price(self):
-        price = self.cleaned_data['price']
+        price = self.cleaned_data.get('price', 0)
         if price <= 0:
             raise ValidationError('Цена продукта не может быть отрицательной')
         return price
 
-    def clean(self):
-        cleaned_data = super().clean()
-        name = cleaned_data.get('name', '').lower()
-        description = cleaned_data.get('description', '').lower()
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '')
         for word in forbidden_list:
-            if word in name or word in description:
-                self.add_error ('name', f'Имя или описание продукта не может содержать слово {word}')
+            if word in name.lower():
+                raise ValidationError(f'Имя продукта не может содержать слово {word}')
+        return name
+
+    def clean_description(self):
+        description = self.cleaned_data.get('description', '')
+        for word in forbidden_list:
+            if word in description.lower():
+                raise ValidationError(f'Описание продукта не может содержать слово {word}')
+        return description
