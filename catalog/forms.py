@@ -14,6 +14,7 @@ class StyleFormMixin:
             else:
                 field.widget.attrs['class'] = 'form-control'
 
+
 class ProductForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Product
