@@ -18,7 +18,7 @@ class StyleFormMixin:
 class ProductForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ('publication_status', 'owner')
 
     def clean_price(self):
         price = self.cleaned_data.get('price', 0)
@@ -39,3 +39,8 @@ class ProductForm(StyleFormMixin, ModelForm):
             if word in description.lower():
                 raise ValidationError(f'Описание продукта не может содержать слово {word}')
         return description
+
+class ProductModeratorForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = Product
+        fields = ('publication_status',)
